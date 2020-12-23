@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using SitePerformanceTester.DataAccess;
 
 namespace SitePerformanceTester.MVC.Controllers
 {
@@ -20,6 +21,12 @@ namespace SitePerformanceTester.MVC.Controllers
 
         public IActionResult Index()
         {
+            //var ping = new System.Net.NetworkInformation.Ping();
+
+            //var result = ping.Send("www.google.com");
+
+            //if (result.Status == System.Net.NetworkInformation.IPStatus.Success)
+
             return View();
         }
 
