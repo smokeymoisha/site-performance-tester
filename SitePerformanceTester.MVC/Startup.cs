@@ -9,7 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace SitePerformanceTester.MVC
 {
@@ -29,6 +30,8 @@ namespace SitePerformanceTester.MVC
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<TesterContext>(options => options.UseSqlServer(connection));
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
