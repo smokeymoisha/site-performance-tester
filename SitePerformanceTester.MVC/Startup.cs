@@ -11,6 +11,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using SitePerformanceTester.DataAccess.Interfaces;
+using SitePerformanceTester.DataAccess.Repositories;
+using SitePerformanceTester.BusinessLogic.Interfaces;
+using SitePerformanceTester.BusinessLogic.Managers;
 
 namespace SitePerformanceTester.MVC
 {
@@ -32,6 +36,10 @@ namespace SitePerformanceTester.MVC
             services.AddDbContext<TesterContext>(options => options.UseSqlServer(connection));
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddTransient<IRequestRepository, RequestRepository>();
+            services.AddTransient<IUrlRepository, UrlRepository>();
+            services.AddTransient<IRequestManager, RequestManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
