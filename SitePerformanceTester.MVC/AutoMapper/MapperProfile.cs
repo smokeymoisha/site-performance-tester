@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using SitePerformanceTester.BusinessLogic.Models;
 using SitePerformanceTester.DataAccess.Models;
+using SitePerformanceTester.MVC.Models;
 
 namespace SitePerformanceTester.MVC.AutoMapper
 {
@@ -17,6 +18,8 @@ namespace SitePerformanceTester.MVC.AutoMapper
 
             CreateMap<SitemapUrl, SitemapUrlModel>();
             CreateMap<SitemapUrlModel, SitemapUrl>();
+
+            CreateMap<SitemapRequestPostModel, SitemapRequestModel>();
         }
     }
 }

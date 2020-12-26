@@ -4,5 +4,10 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Test the response time of your website.</p>
+    @using (Html.BeginForm())
+    {
+        <input placeholder="Enter URL..." name="Url" />
+        <input type="submit" value="Test" />
+    }
 </div>
