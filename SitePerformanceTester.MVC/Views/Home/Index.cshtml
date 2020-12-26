@@ -1,4 +1,6 @@
-﻿@{
+﻿@model SitemapRequestPostModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,7 +9,9 @@
     <p>Test the response time of your website.</p>
     @using (Html.BeginForm())
     {
-        <input placeholder="Enter URL..." name="Url" />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        @Html.TextBoxFor(m => m.Url, new { @placeholder = "Enter URL..." })
         <input type="submit" value="Test" />
     }
 </div>
+ 

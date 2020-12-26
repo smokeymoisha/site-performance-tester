@@ -45,11 +45,5 @@ namespace SitePerformanceTester.BusinessLogic.Managers
 
             }
         }
-
-        //check if entered URL is valid.
-        public bool CheckUrlValidity(string url)
-        {
-
-        }
     }
 }

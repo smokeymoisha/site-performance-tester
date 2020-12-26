@@ -33,13 +33,20 @@ namespace SitePerformanceTester.MVC.Controllers
         }
 
         [HttpPost]
-        public void Index(SitemapRequestPostModel requestPostModel)
+        public IActionResult Index(SitemapRequestPostModel requestPostModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             requestPostModel.Date = DateTime.Now;
 
             var requestModel = _mapper.Map<SitemapRequestModel>(requestPostModel);
 
             _requestManager.Create(requestModel);
+
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
