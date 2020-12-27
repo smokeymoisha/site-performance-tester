@@ -42,7 +42,7 @@ namespace SitePerformanceTester.BusinessLogic
 
         public static string ReadRobots(string url)
         {
-            string result = string.Empty;
+            string result = null;
 
             var request = HttpWebRequest.Create(url) as HttpWebRequest;
             var response = request.GetResponse() as HttpWebResponse;

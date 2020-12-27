@@ -68,7 +68,7 @@ namespace SitePerformanceTester.BusinessLogic.Managers
                 return resultUrl;
             }
 
-            return string.Empty;
+            return null;
         }
     }
 }

@@ -43,6 +43,12 @@ namespace SitePerformanceTester.MVC.Controllers
             requestPostModel.Date = DateTime.Now;
             requestPostModel.SitemapUrl = _requestManager.LocateSitemap(requestPostModel.Url);
 
+            if (requestPostModel.SitemapUrl == null)
+            {
+                ModelState.AddModelError("SitemapUrl", "Unable to locate sitemap for this URL.");
+                return View();
+            }
+
             var requestModel = _mapper.Map<SitemapRequestModel>(requestPostModel);
 
             _requestManager.Create(requestModel);
