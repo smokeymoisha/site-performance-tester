@@ -9,5 +9,6 @@ namespace SitePerformanceTester.BusinessLogic.Interfaces
     {
         void Create(SitemapRequestModel request);
         SitemapRequestModel GetByUrl(string url);
+        string LocateSitemap(string url);
     }
 }

@@ -41,6 +41,7 @@ namespace SitePerformanceTester.MVC.Controllers
             }
 
             requestPostModel.Date = DateTime.Now;
+            requestPostModel.SitemapUrl = _requestManager.LocateSitemap(requestPostModel.Url);
 
             var requestModel = _mapper.Map<SitemapRequestModel>(requestPostModel);
 

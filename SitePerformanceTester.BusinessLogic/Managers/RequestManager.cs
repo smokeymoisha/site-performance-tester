@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SitePerformanceTester.BusinessLogic;
 using SitePerformanceTester.BusinessLogic.Interfaces;
 using SitePerformanceTester.BusinessLogic.Models;
 using SitePerformanceTester.DataAccess.Interfaces;
@@ -6,6 +7,10 @@ using SitePerformanceTester.DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Net.NetworkInformation;
+using System.Net;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SitePerformanceTester.BusinessLogic.Managers
 {
@@ -34,16 +39,36 @@ namespace SitePerformanceTester.BusinessLogic.Managers
             return requestModel;
         }
 
-        public void PingSitemap(string url)
+        //public void PingSitemap(string url)
+        //{
+        //    var ping = new System.Net.NetworkInformation.Ping();
+
+        //    var result = ping.Send(url);
+
+        //    if (result.Status == System.Net.NetworkInformation.IPStatus.)
+        //    {
+
+        //    }
+        //}
+
+        public string LocateSitemap(string url)
         {
-            var ping = new System.Net.NetworkInformation.Ping();
+            string sitemapUrl = url.EndsWith('/') ? url + "sitemap.xml" : url + "/sitemap.xml";
 
-            var result = ping.Send(url);
-
-            if (result.Status == System.Net.NetworkInformation.IPStatus.Success)
+            if (UrlMethods.UrlIsValid(sitemapUrl))
             {
-
+                return sitemapUrl;
             }
+
+            string robotsUrl = url.EndsWith('/') ? url + "robots.txt" : url + "/robots.txt";
+
+            if (UrlMethods.UrlIsValid(robotsUrl))
+            {
+                string resultUrl = UrlMethods.ReadRobots(robotsUrl);
+                return resultUrl;
+            }
+
+            return string.Empty;
         }
     }
 }
