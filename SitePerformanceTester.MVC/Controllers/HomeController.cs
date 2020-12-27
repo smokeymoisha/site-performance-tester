@@ -49,6 +49,8 @@ namespace SitePerformanceTester.MVC.Controllers
                 return View();
             }
 
+            //var test = _requestManager.ParseUrlsFromSitemap(requestPostModel.SitemapUrl);
+
             var requestModel = _mapper.Map<SitemapRequestModel>(requestPostModel);
 
             _requestManager.Create(requestModel);

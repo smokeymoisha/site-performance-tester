@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Xml;
 
 namespace SitePerformanceTester.BusinessLogic
 {
@@ -65,6 +66,57 @@ namespace SitePerformanceTester.BusinessLogic
             response.Close();
 
             return result;
+        }
+
+        public static List<string> ReadSitemapXml(string sitemapUrl)
+        {
+            XmlDocument rssXmlDoc = new XmlDocument();
+            rssXmlDoc.Load(sitemapUrl);
+
+            var sitemapLinks = new List<string>();
+
+            foreach (XmlNode topNode in rssXmlDoc.ChildNodes)
+            {
+                if (topNode.Name.ToLower() == "urlset")
+                {
+                    XmlNamespaceManager nsmgr = new XmlNamespaceManager(rssXmlDoc.NameTable);
+                    nsmgr.AddNamespace("ns", topNode.NamespaceURI);
+
+                    XmlNodeList urlNodes = topNode.ChildNodes;
+                    foreach (XmlNode urlNode in urlNodes)
+                    {
+                        XmlNode locNode = urlNode.SelectSingleNode("ns:loc", nsmgr);
+                        string link = locNode != null ? locNode.InnerText : "";
+
+                        sitemapLinks.Add(link);
+                    }
+                }
+            }
+
+            return sitemapLinks;
+        }
+
+        public static List<string> ReadSitemapTxt(string sitemapUrl)
+        {
+            var sitemapLinks = new List<string>();
+
+            var request = HttpWebRequest.Create(sitemapUrl) as HttpWebRequest;
+            var response = request.GetResponse() as HttpWebResponse;
+
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string line = "";
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        sitemapLinks.Add(line);
+                    }
+                }
+            }
+            response.Close();
+
+            return sitemapLinks;
         }
     }
 }

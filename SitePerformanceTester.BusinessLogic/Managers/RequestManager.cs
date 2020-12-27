@@ -11,6 +11,7 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace SitePerformanceTester.BusinessLogic.Managers
 {
@@ -66,6 +67,27 @@ namespace SitePerformanceTester.BusinessLogic.Managers
             {
                 string resultUrl = UrlMethods.ReadRobots(robotsUrl);
                 return resultUrl;
+            }
+
+            return null;
+        }
+
+        public List<string> ParseUrlsFromSitemap(string sitemapUrl)
+        {
+            var request = HttpWebRequest.Create(sitemapUrl) as HttpWebRequest;
+            var response = request.GetResponse() as HttpWebResponse;
+
+            if (response.ContentType.StartsWith("text/xml") || response.ContentType.StartsWith("application/xml"))
+            {
+                var sitemapLinks = UrlMethods.ReadSitemapXml(sitemapUrl);
+
+                return sitemapLinks;
+            }
+            else if (response.ContentType.StartsWith("text/plain"))
+            {
+                var sitemapLinks = UrlMethods.ReadSitemapTxt(sitemapUrl);
+
+                return sitemapLinks;
             }
 
             return null;
