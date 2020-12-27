@@ -15,11 +15,11 @@ namespace SitePerformanceTester.MVC.AutoMapper
         {
             CreateMap<SitemapRequest, SitemapRequestModel>();
             CreateMap<SitemapRequestModel, SitemapRequest>();
+            CreateMap<SitemapRequestPostModel, SitemapRequestModel>();
 
             CreateMap<SitemapUrl, SitemapUrlModel>();
             CreateMap<SitemapUrlModel, SitemapUrl>();
-
-            CreateMap<SitemapRequestPostModel, SitemapRequestModel>();
+            CreateMap<SitemapUrlModel, SitemapUrlViewModel>(); 
         }
     }
 }

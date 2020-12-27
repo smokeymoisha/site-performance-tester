@@ -15,15 +15,15 @@ namespace SitePerformanceTester.MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IRequestManager _requestManager;
+        private readonly ISitemapUrlManager _sitemapUrlManager;
         private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger, IRequestManager requestManager,
+        public HomeController(IRequestManager requestManager, ISitemapUrlManager sitemapUrlManager,
             IMapper mapper)
         {
-            _logger = logger;
             _requestManager = requestManager;
+            _sitemapUrlManager = sitemapUrlManager;
             _mapper = mapper;
         }
 
@@ -51,10 +51,17 @@ namespace SitePerformanceTester.MVC.Controllers
 
             //var test = _requestManager.ParseUrlsFromSitemap(requestPostModel.SitemapUrl);
 
+            //long test = _sitemapUrlManager.MeasureResponseTime(requestPostModel.Url);
+
             var requestModel = _mapper.Map<SitemapRequestModel>(requestPostModel);
 
             _requestManager.Create(requestModel);
 
+            return View("Result");
+        }
+
+        public IActionResult Result()
+        {
             return View();
         }
 

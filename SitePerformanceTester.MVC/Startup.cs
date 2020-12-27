@@ -40,6 +40,7 @@ namespace SitePerformanceTester.MVC
             services.AddTransient<IRequestRepository, RequestRepository>();
             services.AddTransient<IUrlRepository, UrlRepository>();
             services.AddTransient<IRequestManager, RequestManager>();
+            services.AddTransient<ISitemapUrlManager, SitemapUrlManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
