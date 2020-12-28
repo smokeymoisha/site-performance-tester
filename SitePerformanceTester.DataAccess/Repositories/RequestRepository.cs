@@ -1,4 +1,5 @@
-﻿using SitePerformanceTester.DataAccess.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SitePerformanceTester.DataAccess.Interfaces;
 using SitePerformanceTester.DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,15 @@ namespace SitePerformanceTester.DataAccess.Repositories
         }
         public IEnumerable<SitemapRequest> GetByUrl(string url)
         {
-            var result = _context.SitemapRequests.Where(r => r.Url == url);
+            var result = _context.SitemapRequests.Where(r => r.Url == url).Include(r => r.SitemapUrls);
+            return result;
+        }
+
+        public SitemapRequest GetLatest()
+        {
+            int maxId = _context.SitemapRequests.Max(r => r.Id);
+
+            var result = _context.SitemapRequests.FirstOrDefault(r => r.Id == maxId);
             return result;
         }
     }

@@ -1,0 +1,53 @@
+﻿@model List<SitePerformanceTester.MVC.Models.SitemapRequestPostModel>
+
+@{
+    ViewData["Title"] = "History";
+}
+
+<h1>History</h1>
+
+@foreach (var request in Model)
+{
+    <ul>
+        <li>
+            URL: @Html.DisplayFor(model => request.Url)
+        </li>
+        <li>
+            Sitemap URL: @Html.DisplayFor(model => request.SitemapUrl)
+        </li>
+        <li>
+            Date: @Html.DisplayFor(model => request.Date)
+        </li>
+    </ul>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    URL
+                </th>
+                <th>
+                    Response Time
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var url in request.SitemapUrls)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => url.Url)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => url.ResponseTime)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    <br />
+    <br />
+}
+

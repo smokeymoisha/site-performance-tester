@@ -49,20 +49,48 @@ namespace SitePerformanceTester.MVC.Controllers
                 return View();
             }
 
-            //var test = _requestManager.ParseUrlsFromSitemap(requestPostModel.SitemapUrl);
-
-            //long test = _sitemapUrlManager.MeasureResponseTime(requestPostModel.Url);
-
             var requestModel = _mapper.Map<SitemapRequestModel>(requestPostModel);
-
             _requestManager.Create(requestModel);
 
-            return View("Result");
+            //==============================
+
+            var urlList = _requestManager.ParseUrlsFromSitemap(requestPostModel.SitemapUrl);
+            var urlViewModelList = new List<SitemapUrlViewModel>();
+
+            foreach (string url in urlList)
+            {
+                var urlViewModel = new SitemapUrlViewModel();
+                urlViewModel.Url = url;
+                urlViewModel.ResponseTime = _sitemapUrlManager.MeasureResponseTime(url);
+                urlViewModel.SitemapRequestId = _requestManager.GetLatest().Id;
+                urlViewModel.MaxResponseTime = _sitemapUrlManager.GetMaxResponseTimeForUrl(url);
+                urlViewModel.MinResponseTime = _sitemapUrlManager.GetMinResponseTimeForUrl(url);
+
+                var urlModel = _mapper.Map<SitemapUrlModel>(urlViewModel);
+                _sitemapUrlManager.Create(urlModel);
+
+                urlViewModelList.Add(urlViewModel);
+            }
+
+            var result = urlViewModelList.OrderByDescending(url => url.ResponseTime);
+
+            return View("Result", result);
         }
 
-        public IActionResult Result()
+        [HttpPost]
+        public IActionResult History(SitemapRequestPostModel requestPostModel)
         {
-            return View();
+            var list = _requestManager.GetByUrl(requestPostModel.Url);
+
+            var resultList = new List<SitemapRequestPostModel>();
+
+            foreach(var request in list)
+            {
+                var postModel = _mapper.Map<SitemapRequestPostModel>(request);
+                resultList.Add(postModel);
+            }
+
+            return View(resultList);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

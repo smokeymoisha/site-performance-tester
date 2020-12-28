@@ -9,5 +9,8 @@ namespace SitePerformanceTester.MVC.Models
     {
         public string Url { get; set; }
         public long ResponseTime { get; set; }
+        public long MaxResponseTime { get; set; }
+        public long MinResponseTime { get; set; }
+        public int SitemapRequestId { get; set; }
     }
 }

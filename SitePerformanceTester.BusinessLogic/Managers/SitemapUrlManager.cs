@@ -9,6 +9,7 @@ using System.Text;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Diagnostics;
+using System.Linq;
 
 namespace SitePerformanceTester.BusinessLogic.Managers
 {
@@ -33,6 +34,11 @@ namespace SitePerformanceTester.BusinessLogic.Managers
         {
             long result = -1;
 
+            if (!UrlMethods.UrlIsValid(url))
+            {
+                return result;
+            }
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
             var timer = new Stopwatch();
@@ -43,6 +49,24 @@ namespace SitePerformanceTester.BusinessLogic.Managers
             timer.Stop();
 
             result = timer.ElapsedMilliseconds;
+
+            return result;
+        }
+
+        public long GetMaxResponseTimeForUrl(string url)
+        {
+            var list = _urlRepository.GetByUrl(url);
+
+            long result = list.Max(url => url.ResponseTime);
+
+            return result;
+        }
+
+        public long GetMinResponseTimeForUrl(string url)
+        {
+            var list = _urlRepository.GetByUrl(url);
+
+            long result = list.Min(url => url.ResponseTime);
 
             return result;
         }

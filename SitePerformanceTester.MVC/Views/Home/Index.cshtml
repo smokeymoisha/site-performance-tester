@@ -14,3 +14,13 @@
         <input type="submit" value="Test" />
     }
 </div>
+
+<div class="text-center">
+    <p>Check request history for a specified URL.</p>
+    @using (Html.BeginForm("History", "Home", FormMethod.Post))
+    {
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        @Html.TextBoxFor(m => m.Url, new { @placeholder = "Enter URL..." })
+        <input type="submit" value="Check" />
+    }
+</div>

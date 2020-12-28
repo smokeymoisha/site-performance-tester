@@ -8,8 +8,9 @@ namespace SitePerformanceTester.BusinessLogic.Interfaces
     public interface IRequestManager
     {
         void Create(SitemapRequestModel request);
-        SitemapRequestModel GetByUrl(string url);
+        List<SitemapRequestModel> GetByUrl(string url);
         string LocateSitemap(string url);
         List<string> ParseUrlsFromSitemap(string sitemapUrl);
+        SitemapRequestModel GetLatest();
     }
 }

@@ -32,25 +32,19 @@ namespace SitePerformanceTester.BusinessLogic.Managers
             _repository.Create(request);
         }
 
-        public SitemapRequestModel GetByUrl(string url)
+        public List<SitemapRequestModel> GetByUrl(string url)
         {
-            var request = _repository.GetByUrl(url);
-            var requestModel = _mapper.Map<SitemapRequestModel>(request);
+            var requestList = _repository.GetByUrl(url);
+            var resultList = new List<SitemapRequestModel>();
 
-            return requestModel;
+            foreach(var request in requestList)
+            {
+                var requestModel =_mapper.Map<SitemapRequestModel>(request);
+                resultList.Add(requestModel);
+            }
+
+            return resultList;
         }
-
-        //public void PingSitemap(string url)
-        //{
-        //    var ping = new System.Net.NetworkInformation.Ping();
-
-        //    var result = ping.Send(url);
-
-        //    if (result.Status == System.Net.NetworkInformation.IPStatus.)
-        //    {
-
-        //    }
-        //}
 
         public string LocateSitemap(string url)
         {
@@ -91,6 +85,14 @@ namespace SitePerformanceTester.BusinessLogic.Managers
             }
 
             return null;
+        }
+
+        public SitemapRequestModel GetLatest()
+        {
+            var request = _repository.GetLatest();
+
+            var result = _mapper.Map<SitemapRequestModel>(request);
+            return result;
         }
     }
 }

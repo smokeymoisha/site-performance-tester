@@ -9,5 +9,6 @@ namespace SitePerformanceTester.DataAccess.Interfaces
     {
         void Create(SitemapRequest request);
         IEnumerable<SitemapRequest> GetByUrl(string url);
+        SitemapRequest GetLatest();
     }
 }

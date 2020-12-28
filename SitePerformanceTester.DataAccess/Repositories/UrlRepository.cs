@@ -27,5 +27,11 @@ namespace SitePerformanceTester.DataAccess.Repositories
             var result = _context.SitemapUrls.Where(u => u.SitemapRequestId == id);
             return result;
         }
+
+        public IEnumerable<SitemapUrl> GetByUrl(string url)
+        {
+            var result = _context.SitemapUrls.Where(u => u.Url == url);
+            return result;
+        }
     }
 }

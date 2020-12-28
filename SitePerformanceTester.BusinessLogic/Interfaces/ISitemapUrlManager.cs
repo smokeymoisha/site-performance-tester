@@ -9,5 +9,7 @@ namespace SitePerformanceTester.BusinessLogic.Interfaces
     {
         void Create(SitemapUrlModel urlModel);
         long MeasureResponseTime(string url);
+        long GetMaxResponseTimeForUrl(string url);
+        long GetMinResponseTimeForUrl(string url);
     }
 }
