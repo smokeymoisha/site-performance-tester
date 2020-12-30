@@ -53,20 +53,28 @@ namespace SitePerformanceTester.BusinessLogic.Managers
             return result;
         }
 
-        public long GetMaxResponseTimeForUrl(string url)
+        public long? GetMaxResponseTimeForUrl(string url)
         {
-            var list = _urlRepository.GetByUrl(url);
+            long? result = null;
+            var list = _urlRepository.GetByUrl(url).ToList();
 
-            long result = list.Max(url => url.ResponseTime);
+            if (list.Count > 0)
+            {
+                result = list.Max(url => url.ResponseTime);
+            }
 
             return result;
         }
 
-        public long GetMinResponseTimeForUrl(string url)
+        public long? GetMinResponseTimeForUrl(string url)
         {
-            var list = _urlRepository.GetByUrl(url);
+            long? result = null;
+            var list = _urlRepository.GetByUrl(url).ToList();
 
-            long result = list.Min(url => url.ResponseTime);
+            if (list.Count > 0)
+            {
+                result = list.Min(url => url.ResponseTime);
+            }
 
             return result;
         }

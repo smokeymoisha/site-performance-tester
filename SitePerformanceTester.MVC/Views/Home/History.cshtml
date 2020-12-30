@@ -40,7 +40,15 @@
                     @Html.DisplayFor(model => url.Url)
                 </td>
                 <td>
-                    @Html.DisplayFor(model => url.ResponseTime)
+                    @if (url.ResponseTime >= 0)
+                    {
+                        @Html.DisplayFor(model => url.ResponseTime)
+                    }
+                    else
+                    {
+                        <span>No Result</span>
+                    }
+
                 </td>
             </tr>
             }
