@@ -43,18 +43,33 @@ namespace SitePerformanceTester.MVC.Controllers
             requestPostModel.Date = DateTime.Now;
             requestPostModel.SitemapUrl = _requestManager.LocateSitemap(requestPostModel.Url);
 
-            if (requestPostModel.SitemapUrl == null)
-            {
-                ModelState.AddModelError("SitemapUrl", "Unable to locate sitemap for this URL.");
-                return View();
-            }
-
             var requestModel = _mapper.Map<SitemapRequestModel>(requestPostModel);
             _requestManager.Create(requestModel);
 
             //==============================
 
-            var urlList = _requestManager.ParseUrlsFromSitemap(requestPostModel.SitemapUrl);
+            var urlList = new List<string>();
+
+            if (requestPostModel.SitemapUrl == null)
+            {
+                urlList = _requestManager.ParseUrlsFromHtml(requestPostModel.Url).ToList();
+            }
+            else
+            {
+                urlList = _requestManager.ParseUrlsFromSitemap(requestPostModel.SitemapUrl);
+
+                if (urlList.Count == 0)
+                {
+                    urlList = _requestManager.ParseUrlsFromHtml(requestPostModel.Url).ToList();
+                }
+            }
+
+            if (urlList.Count == 0)
+            {
+                ModelState.AddModelError("SitemapUrls", "Unable to parse URLs for this site. ");
+                return View();
+            }
+
             var urlViewModelList = new List<SitemapUrlViewModel>();
 
             foreach (string url in urlList)

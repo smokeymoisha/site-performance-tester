@@ -11,6 +11,7 @@ namespace SitePerformanceTester.BusinessLogic.Interfaces
         List<SitemapRequestModel> GetByUrl(string url);
         string LocateSitemap(string url);
         List<string> ParseUrlsFromSitemap(string sitemapUrl);
+        IEnumerable<string> ParseUrlsFromHtml(string url);
         SitemapRequestModel GetLatest();
     }
 }

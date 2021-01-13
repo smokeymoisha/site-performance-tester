@@ -1,17 +1,13 @@
 ﻿using AutoMapper;
-using SitePerformanceTester.BusinessLogic;
 using SitePerformanceTester.BusinessLogic.Interfaces;
 using SitePerformanceTester.BusinessLogic.Models;
 using SitePerformanceTester.DataAccess.Interfaces;
 using SitePerformanceTester.DataAccess.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Net.NetworkInformation;
 using System.Net;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Xml;
+using System.Linq;
+using HtmlAgilityPack;
+using System;
 
 namespace SitePerformanceTester.BusinessLogic.Managers
 {
@@ -68,23 +64,72 @@ namespace SitePerformanceTester.BusinessLogic.Managers
 
         public List<string> ParseUrlsFromSitemap(string sitemapUrl)
         {
+            var result = new List<string>();
+
             var request = HttpWebRequest.Create(sitemapUrl) as HttpWebRequest;
             var response = request.GetResponse() as HttpWebResponse;
 
             if (response.ContentType.StartsWith("text/xml") || response.ContentType.StartsWith("application/xml"))
             {
-                var sitemapLinks = UrlMethods.ReadSitemapXml(sitemapUrl);
-
-                return sitemapLinks;
+                result = UrlMethods.ReadSitemapXml(sitemapUrl);
             }
             else if (response.ContentType.StartsWith("text/plain"))
             {
-                var sitemapLinks = UrlMethods.ReadSitemapTxt(sitemapUrl);
-
-                return sitemapLinks;
+                result = UrlMethods.ReadSitemapTxt(sitemapUrl);
             }
 
-            return null;
+            return result;
+        }
+
+        public IEnumerable<string> ParseUrlsFromHtml(string urlRoot)
+        {
+            var uriRoot = new Uri(urlRoot);
+
+            var queue = new Queue<string>();
+            var allUrls = new HashSet<string>();
+
+            queue.Enqueue(urlRoot);
+            allUrls.Add(urlRoot);
+
+            while (queue.Count > 0)
+            {
+                string currentUrl = queue.Dequeue();
+
+                yield return currentUrl;
+
+                var web = new HtmlWeb();
+                var doc = new HtmlDocument();
+                doc = web.Load(urlRoot);
+
+                var nodes = doc.DocumentNode.SelectNodes("//a[@href]");
+
+                if (nodes == null) continue;
+
+                foreach (var link in nodes)
+                {
+                    var att = link.Attributes["href"];
+                    var href = att.Value;
+
+                    Uri uri = new Uri(href, UriKind.RelativeOrAbsolute);
+
+                    if (!uri.IsAbsoluteUri)
+                    {
+                        uri = new Uri(uriRoot, uri);
+                    }
+
+                    string uriString = uri.ToString();
+
+                    if (!allUrls.Contains(uriString))
+                    {
+                        allUrls.Add(uriString);
+
+                        if (uriRoot.IsBaseOf(uri))
+                        {
+                            queue.Enqueue(uriString);
+                        }
+                    }
+                }
+            }
         }
 
         public SitemapRequestModel GetLatest()
