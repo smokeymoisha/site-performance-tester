@@ -51,10 +51,24 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MinResponseTime)
+                    @if (item.MinResponseTime >= 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.MinResponseTime)
+                    }
+                    else
+                    {
+                        <span>No Result</span>
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MaxResponseTime)
+                    @if (item.MaxResponseTime >= 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.MaxResponseTime)
+                    }
+                    else
+                    {
+                        <span>No Result</span>
+                    }
                 </td>
             </tr>
         }
