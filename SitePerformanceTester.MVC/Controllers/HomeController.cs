@@ -79,7 +79,18 @@ namespace SitePerformanceTester.MVC.Controllers
                 urlViewModel.ResponseTime = _sitemapUrlManager.MeasureResponseTime(url);
                 urlViewModel.SitemapRequestId = _requestManager.GetLatest().Id;
                 urlViewModel.MaxResponseTime = _sitemapUrlManager.GetMaxResponseTimeForUrl(url);
+
+                if (urlViewModel.MaxResponseTime == null || urlViewModel.MaxResponseTime < urlViewModel.ResponseTime)
+                {
+                    urlViewModel.MaxResponseTime = urlViewModel.ResponseTime;
+                }
+
                 urlViewModel.MinResponseTime = _sitemapUrlManager.GetMinResponseTimeForUrl(url);
+
+                if (urlViewModel.MinResponseTime == null || urlViewModel.MinResponseTime > urlViewModel.ResponseTime)
+                {
+                    urlViewModel.MinResponseTime = urlViewModel.ResponseTime;
+                }
 
                 var urlModel = _mapper.Map<SitemapUrlModel>(urlViewModel);
                 _sitemapUrlManager.Create(urlModel);
